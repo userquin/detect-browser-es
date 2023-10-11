@@ -48,19 +48,17 @@ export class BrowserInfo
 }
 
 export class ServerInfo
-  implements DetectedInfo<"node", "node", NodeJS.Platform, ServerData>
+  implements DetectedInfo<"node", "node", NodeJS.Platform, string>
 {
   public readonly type = "node";
   public readonly name: "node" = "node";
   public readonly os: NodeJS.Platform = platform;
-  public readonly version: ServerData = {
-    nodeVersion,
-    nodeMajorVersion,
-    providerInfo,
-    runtimeInfo,
-  };
+  public readonly nodeVersion: string | null = nodeVersion;
+  public readonly nodeMajorVersion: number | null = nodeMajorVersion;
+  public readonly providerInfo: ProviderInfo | undefined = providerInfo;
+  public readonly runtimeInfo: RuntimeInfo | undefined = runtimeInfo;
 
-  constructor() {}
+  constructor(public readonly version: string) {}
 }
 
 export class SearchBotDeviceInfo
@@ -336,8 +334,8 @@ export function detectOS(ua: string): OperatingSystem | null {
 }
 
 export function getServerVersion(): ServerInfo | null {
-  const isNode = process !== undefined && process.version;
-  return isNode ? new ServerInfo() : null;
+  const version = process === undefined ? undefined : process.version;
+  return version ? new ServerInfo(version) : null;
 }
 
 function createVersionParts(count: number): string[] {
