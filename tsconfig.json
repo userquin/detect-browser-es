@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "ESNext",
     "module": "ESNext",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Node",
-    "strict": true,
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "types": ["node"],
     "declaration": true,
-    "types": ["node"]
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true
   },
   "include": ["src", "test", "playground"]
 }

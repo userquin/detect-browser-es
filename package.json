@@ -1,6 +1,10 @@
 {
   "name": "detect-browser-es",
+  "type": "module",
   "version": "0.0.0",
+  "packageManager": "pnpm@8.9.0",
+  "license": "MIT",
+  "homepage": "https://github.com/userquin/detect-browser-es#readme",
   "xrepository": {
     "type": "git",
     "url": "https://github.com/unjs/detect-browser-es"
@@ -9,9 +13,7 @@
     "type": "git",
     "url": "https://github.com/userquin/detect-browser-es"
   },
-  "license": "MIT",
   "sideEffects": false,
-  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -28,24 +30,23 @@
   "scripts": {
     "build": "unbuild",
     "dev": "vitest",
-    "lint": "eslint --cache --ext .ts,.js,.mjs,.cjs . && prettier -c src test",
-    "lint:fix": "eslint --cache --ext .ts,.js,.mjs,.cjs . --fix && prettier -c src test -w",
-    "release": "pnpm test && pnpm build && changelogen --release --push && npm publish",
+    "lint": "eslint .",
+    "lint:fix": "nr lint --fix",
+    "release": "pnpm test && pnpm build && bumpp && npm publish",
     "test": "pnpm lint && vitest run --coverage"
   },
   "dependencies": {
     "std-env": "^3.4.3"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^0.43.1",
+    "@antfu/ni": "^0.21.8",
     "@types/node": "^18.18.4",
     "@vitest/coverage-c8": "^0.33.0",
-    "changelogen": "^0.5.5",
+    "bumpp": "^9.2.0",
     "eslint": "^8.51.0",
-    "eslint-config-unjs": "^0.2.1",
-    "prettier": "^3.0.3",
     "typescript": "^5.2.2",
     "unbuild": "^1.2.1",
     "vitest": "^0.34.6"
-  },
-  "packageManager": "pnpm@8.9.0"
+  }
 }
