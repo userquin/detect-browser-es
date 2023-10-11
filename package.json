@@ -1,8 +1,14 @@
 {
   "name": "detect-browser-es",
   "version": "0.0.0",
-  "xrepository": "unjs/detect-browser-es",
-  "repository": "detect-browser-es",
+  "xrepository": {
+    "type": "git",
+    "url": "https://github.com/unjs/detect-browser-es"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/userquin/detect-browser-es"
+  },
   "license": "MIT",
   "sideEffects": false,
   "type": "module",
