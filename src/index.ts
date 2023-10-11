@@ -29,13 +29,6 @@ interface DetectedInfo<
   readonly os: O;
 }
 
-interface ServerData {
-  runtimeInfo?: RuntimeInfo;
-  providerInfo?: ProviderInfo;
-  nodeVersion: string | null;
-  nodeMajorVersion: number | null;
-}
-
 export class BrowserInfo
   implements DetectedInfo<"browser", Browser, OperatingSystem | null, string>
 {
