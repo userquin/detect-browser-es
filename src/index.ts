@@ -327,8 +327,7 @@ export function detectOS(ua: string): OperatingSystem | null {
 }
 
 export function getServerVersion(): ServerInfo | null {
-  const version = process === undefined ? undefined : process.version;
-  return version ? new ServerInfo(version) : null;
+  return nodeVersion ? new ServerInfo(`${nodeVersion}`) : null;
 }
 
 function createVersionParts(count: number): string[] {
