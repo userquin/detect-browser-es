@@ -48,8 +48,8 @@ export class ServerInfo
   public readonly os: NodeJS.Platform = platform;
   public readonly nodeVersion: string | null = nodeVersion;
   public readonly nodeMajorVersion: number | null = nodeMajorVersion;
-  public readonly providerInfo: ProviderInfo | undefined = providerInfo;
-  public readonly runtimeInfo: RuntimeInfo | undefined = runtimeInfo;
+  public readonly provider: ProviderInfo | undefined = providerInfo;
+  public readonly runtime: RuntimeInfo | undefined = runtimeInfo;
 
   constructor(public readonly version: string) {}
 }
