@@ -1,0 +1,45 @@
+{
+  "name": "detect-browser-es",
+  "version": "0.0.0",
+  "xrepository": "unjs/detect-browser-es",
+  "repository": "detect-browser-es",
+  "license": "MIT",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "vitest",
+    "lint": "eslint --cache --ext .ts,.js,.mjs,.cjs . && prettier -c src test",
+    "lint:fix": "eslint --cache --ext .ts,.js,.mjs,.cjs . --fix && prettier -c src test -w",
+    "release": "pnpm test && pnpm build && changelogen --release --push && npm publish",
+    "test": "pnpm lint && vitest run --coverage"
+  },
+  "dependencies": {
+    "std-env": "^3.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.18.4",
+    "@vitest/coverage-c8": "^0.33.0",
+    "changelogen": "^0.5.5",
+    "eslint": "^8.51.0",
+    "eslint-config-unjs": "^0.2.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2",
+    "unbuild": "^1.2.1",
+    "vitest": "^0.34.6"
+  },
+  "packageManager": "pnpm@8.9.0"
+}
