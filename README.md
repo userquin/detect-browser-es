@@ -24,10 +24,10 @@ Import:
 
 ```js
 // ESM
-import { parse, serialize } from 'detect-browser-es'
+import { detect } from 'detect-browser-es'
 
 // CommonJS
-const { parse, serialize } = require('detect-browser-es')
+const { detect } = require('detect-browser-es')
 ```
 
 ## License
