@@ -44,13 +44,13 @@ const { detect } = require('detect-browser-es')
 
 ## Testing
 
-To run the test `nr test`, will run the original tests from `detect-browser` and the new ones corresponding to the new features (except `WebDriverIO` detection, requires `WebDriverIO`).
+To run the test from root folder run `nr test`, the script will run the original tests from `detect-browser` and the new ones corresponding to the new features, except WebDriverIO detection.
 
-To test the `WebDriverIO` detection, you run one of the following commands:
-- `nr wdio-chrome`: test `WebDriverIO` detection with Chrome (you must have it installed)
-- `nr wdio-edge`: test `WebDriverIO` detection with Edge (you must have it installed)
-- `nr wdio-firefox`: test `WebDriverIO` detection with Firefox (you must have it installed)
-- `nr wdio-safari`: test `WebDriverIO` detection with Safari (you must have it installed) and on MacOS machine.
+To test WebDriverIO detection, run one of the following commands (requires Vitest v1.0.0-beta.2, not yet released, tests will not work):
+- `nr wdio-chrome`: Chrome must be installed
+- `nr wdio-edge`: Edge must be installed
+- `nr wdio-firefox`: Firefox must be installed
+- `nr wdio-safari`: Safari must be installed and only on macOS machine.
 
 ## License
 
