@@ -44,7 +44,9 @@ const { detect } = require('detect-browser-es')
 
 ## Testing
 
-To run the test from root folder run `nr test`, the script will run the original tests from `detect-browser` and the new ones corresponding to the new features, except WebDriverIO detection.
+To run the tests, from root folder run `nr test`, the script will run:
+- the original tests from `detect-browser`
+- Happy DOM and JSDOM tests, except WebDriverIO detection
 
 To test WebDriverIO detection, run one of the following commands (requires Vitest v1.0.0-beta.2, not yet released, tests will not work):
 - `nr wdio-chrome`: Chrome must be installed
