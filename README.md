@@ -30,6 +30,10 @@ import { detect } from 'detect-browser-es'
 const { detect } = require('detect-browser-es')
 ```
 
+## New Features
+
+Detect [Happy DOM](https://github.com/capricorn86/happy-dom) and [JSDOM](https://github.com/jsdom/jsdom) when using test environments like [Vitest](https://github.com/vitest-dev/vitest) (check the [test](https://github.com/userquin/detect-browser-es/tree/main/test) folder).
+
 ## License
 
 [MIT](./LICENSE)
