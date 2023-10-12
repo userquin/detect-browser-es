@@ -9,6 +9,6 @@ describe('jsdom', () => {
     const browser = detect()
     expect(browser).toBeDefined()
     expect(browser?.type).toBe('jsdom')
-    expect(browser?.version).toBeDefined()
+    expect(browser?.version).toMatchInlineSnapshot('"22.1.0"')
   })
 })
