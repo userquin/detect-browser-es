@@ -4,11 +4,11 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "baseUrl": ".",
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src", "test", "playground"]
+  "include": ["src", "test"]
 }

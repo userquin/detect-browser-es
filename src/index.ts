@@ -11,6 +11,8 @@ import {
 export type DetectedInfoType =
   | 'browser'
   | 'node'
+  | 'jsdom'
+  | 'happy-dom'
   | 'bot-device'
   | 'bot'
   | 'react-native'
@@ -25,6 +27,18 @@ interface DetectedInfo<
   readonly name: N
   readonly version: V
   readonly os: O
+}
+
+export interface JSDOMOptions {
+  userAgent?: string
+}
+
+export interface HappyDOMOptions {
+  settings?: {
+    navigator?: {
+      userAgent?: string
+    }
+  }
 }
 
 export class BrowserInfo
@@ -78,6 +92,26 @@ implements DetectedInfo<'react-native', 'react-native', null, null> {
   public readonly os: null = null
 }
 
+export class JSDOMInfo
+implements DetectedInfo<'jsdom', Browser, OperatingSystem | null, string> {
+  public readonly type = 'jsdom'
+  constructor(
+    public readonly name: Browser,
+    public readonly version: string,
+    public readonly os: OperatingSystem | null,
+  ) {}
+}
+
+export class HappyDomInfo
+implements DetectedInfo<'happy-dom', Browser, OperatingSystem | null, string> {
+  public readonly type = 'happy-dom'
+  constructor(
+    public readonly name: Browser,
+    public readonly version: string,
+    public readonly os: OperatingSystem | null,
+  ) {}
+}
+
 export type Browser =
   | 'aol'
   | 'edge'
@@ -109,6 +143,8 @@ export type Browser =
   | 'ios-webview'
   | 'curl'
   | 'searchbot'
+  | 'jsdom'
+  | 'happy-dom'
 export type OperatingSystem =
   | 'iOS'
   | 'Android OS'
@@ -186,6 +222,8 @@ const userAgentRules: UserAgentRule[] = [
   ['ios-webview', /AppleWebKit\/([\d.]+).*Gecko\)$/],
   ['curl', /^curl\/([\d.]+)$/],
   ['searchbot', SEARCHBOX_UA_REGEX],
+  ['jsdom', /jsdom\/([\d.]+).*/],
+  ['happy-dom', /HappyDOM\/([\d.]+).*/],
 ]
 const operatingSystemRules: OperatingSystemRule[] = [
   ['iOS', /iP(hone|od|ad)/],
@@ -224,6 +262,8 @@ export function detect(
   | BotInfo
   | ServerInfo
   | ReactNativeInfo
+  | JSDOMInfo
+  | HappyDomInfo
   | null {
   if (userAgent)
     return parseUserAgent(userAgent)
@@ -234,6 +274,22 @@ export function detect(
     && navigator.product === 'ReactNative'
   )
     return new ReactNativeInfo()
+
+  if (typeof navigator !== 'undefined' && navigator.userAgent.includes('jsdom')) {
+    const browser = parseUserAgent(navigator.userAgent)
+    if (browser instanceof BrowserInfo)
+      return new JSDOMInfo(browser.name, browser.version, browser.os)
+  }
+
+  if (typeof window !== 'undefined' && 'happyDOM' in window) {
+    const happyDOM: HappyDOMOptions | undefined = window.happyDOM as unknown as any
+    const ua = happyDOM?.settings?.navigator?.userAgent
+    if (ua) {
+      const browser = parseUserAgent(ua)
+      if (browser instanceof BrowserInfo)
+        return new HappyDomInfo(browser.name, browser.version, browser.os)
+    }
+  }
 
   if (typeof navigator !== 'undefined')
     return parseUserAgent(navigator.userAgent)
