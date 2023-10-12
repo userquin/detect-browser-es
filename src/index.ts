@@ -18,10 +18,7 @@ export type DetectedInfoType =
   | 'react-native'
 
 interface DetectedInfo<
-  T extends DetectedInfoType,
-  N extends string,
-  O,
-  V = null,
+  T extends DetectedInfoType, N extends string, O, V = null,
 > {
   readonly type: T
   readonly name: N
