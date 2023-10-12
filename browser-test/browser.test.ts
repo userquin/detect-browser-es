@@ -20,7 +20,7 @@ describe('Browser Detection test', () => {
   test.skipIf(browser !== 'firefox')('FireFox', () => {
     expect(detect()?.name).toBe('firefox')
   })
-  test.skipIf(platform !== 'darwin' || browser !== 'safari')('FireFox', () => {
+  test.skipIf(platform !== 'darwin' || browser !== 'safari')('Safari', () => {
     expect(detect()?.name).toBe('safari')
   })
 })
