@@ -1,5 +1,4 @@
 import { env, platform } from 'std-env'
-import { describe } from 'vitest'
 import { detect } from '../src'
 
 // TODO: update to vitest 1.beta.2: will not work with 1.beta.1
@@ -7,7 +6,7 @@ import { detect } from '../src'
 const browser = env.VITE_BROWSER
 
 describe('Browser Detection test', () => {
-  test('User Agent found', () => {
+  test('User Agent detection', () => {
     expect(typeof navigator).toBeDefined()
     expect(typeof navigator?.userAgent).toBeDefined()
   })
