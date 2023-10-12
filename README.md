@@ -34,7 +34,7 @@ const { detect } = require('detect-browser-es')
 
 **TODO**: maybe we can revert these changes before releasing the first version.
 
-[NodeInfo](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts#L30) and [getNodeVersion](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts#L306C17-L306C31) have been renamed to [ServerInfo](https://github.com/userquin/detect-browser-es/blob/main/src/index.ts#L50) and [getServerVersion](https://github.com/userquin/detect-browser-es/blob/main/src/index.ts#L369) respectively.
+[NodeInfo](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts#L30) and [getNodeVersion](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts#L306C17-L306C31) have been renamed to [ServerInfo](https://github.com/userquin/detect-browser-es/blob/main/src/index.ts#L47) and [getServerVersion](https://github.com/userquin/detect-browser-es/blob/main/src/index.ts#L366) respectively.
 
 ## New Features
 
