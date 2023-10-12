@@ -1,7 +1,12 @@
-import { expect } from 'vitest'
-import { parseUserAgent } from '../src'
+import { browserName, parseUserAgent } from '../src'
 
 describe('browser detection', () => {
+  // for coverage: will call matchUserAgent that's covered in the rest tests
+  it('browser name', () => {
+    expect(browserName(
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+    )).toBe('chrome')
+  })
   // new tests
   it('Chrome Windows 10: latest', () => {
     const browser = parseUserAgent(
