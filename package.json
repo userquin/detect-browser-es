@@ -33,7 +33,11 @@
     "lint": "eslint .",
     "lint:fix": "nr lint --fix",
     "release": "pnpm test && pnpm build && bumpp && npm publish",
-    "test": "pnpm lint && vitest run --coverage"
+    "test": "pnpm lint && vitest run --coverage",
+    "wdio-chrome": "BROWSER=chrome vitest --c vitest-browser.config.mts",
+    "wdio-edge": "BROWSER=edge vitest --c vitest-browser.config.mts",
+    "wdio-firefox": "BROWSER=firefox vitest --c vitest-browser.config.mts",
+    "wdio-test": "pnpm run wdio-chrome && pnpm run wdio-edge && pnpm run wdio-firefox"
   },
   "dependencies": {
     "std-env": "^3.4.3"
@@ -43,13 +47,16 @@
     "@antfu/ni": "^0.21.8",
     "@types/node": "^18.18.4",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@vitest/browser": "^1.0.0-beta.1",
     "@vitest/coverage-v8": "^0.34.6",
+    "@vitest/utils": "^0.34.6",
     "bumpp": "^9.2.0",
     "eslint": "^8.51.0",
     "happy-dom": "^12.9.1",
     "jsdom": "^22.1.0",
     "typescript": "^5.2.2",
     "unbuild": "^1.2.1",
-    "vitest": "^0.34.6"
+    "vitest": "^1.0.0-beta.1",
+    "webdriverio": "^8.18.0"
   }
 }
