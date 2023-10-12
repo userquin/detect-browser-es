@@ -29,10 +29,6 @@ interface DetectedInfo<
   readonly os: O
 }
 
-export interface JSDOMOptions {
-  userAgent?: string
-}
-
 export interface HappyDOMOptions {
   settings?: {
     navigator?: {
