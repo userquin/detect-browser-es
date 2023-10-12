@@ -37,6 +37,7 @@
     "wdio-chrome": "BROWSER=chrome vitest --c vitest-browser.config.mts",
     "wdio-edge": "BROWSER=edge vitest --c vitest-browser.config.mts",
     "wdio-firefox": "BROWSER=firefox vitest --c vitest-browser.config.mts",
+    "wdio-safari": "BROWSER=safari vitest --c vitest-browser.config.mts",
     "wdio-test": "pnpm run wdio-chrome && pnpm run wdio-edge && pnpm run wdio-firefox"
   },
   "dependencies": {

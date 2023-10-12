@@ -13,6 +13,7 @@ export type DetectedInfoType =
   | 'node'
   | 'jsdom'
   | 'happy-dom'
+  | 'webdriverio'
   | 'bot-device'
   | 'bot'
   | 'react-native'
@@ -105,6 +106,16 @@ implements DetectedInfo<'happy-dom', Browser, OperatingSystem | null, string> {
   ) {}
 }
 
+export class WebDriverIOInfo
+implements DetectedInfo<'webdriverio', Browser, OperatingSystem | null, string> {
+  public readonly type = 'webdriverio'
+  constructor(
+    public readonly name: Browser,
+    public readonly version: string,
+    public readonly os: OperatingSystem | null,
+  ) {}
+}
+
 export type Browser =
   | 'aol'
   | 'edge'
@@ -138,6 +149,7 @@ export type Browser =
   | 'searchbot'
   | 'jsdom'
   | 'happy-dom'
+  | 'webdriverio'
 export type OperatingSystem =
   | 'iOS'
   | 'Android OS'
@@ -247,17 +259,7 @@ const operatingSystemRules: OperatingSystemRule[] = [
   ['OS/2', /OS\/2/],
 ]
 
-export function detect(
-  userAgent?: string,
-):
-  | BrowserInfo
-  | SearchBotDeviceInfo
-  | BotInfo
-  | ServerInfo
-  | ReactNativeInfo
-  | JSDOMInfo
-  | HappyDomInfo
-  | null {
+export function detect(userAgent?: string) {
   if (userAgent)
     return parseUserAgent(userAgent)
 
@@ -274,13 +276,21 @@ export function detect(
       return new JSDOMInfo(browser.name, browser.version, browser.os)
   }
 
-  if (typeof window !== 'undefined' && 'happyDOM' in window) {
-    const happyDOM: HappyDOMOptions | undefined = window.happyDOM as unknown as any
-    const ua = happyDOM?.settings?.navigator?.userAgent
-    if (ua) {
-      const browser = parseUserAgent(ua)
+  if (typeof window !== 'undefined') {
+    if ('happyDOM' in window) {
+      const happyDOM: HappyDOMOptions | undefined = window.happyDOM as unknown as any
+      const ua = happyDOM?.settings?.navigator?.userAgent
+      if (ua) {
+        const browser = parseUserAgent(ua)
+        if (browser instanceof BrowserInfo)
+          return new HappyDomInfo(browser.name, browser.version, browser.os)
+      }
+    }
+
+    if ('__wdioSpec__' in window) {
+      const browser = parseUserAgent(navigator.userAgent)
       if (browser instanceof BrowserInfo)
-        return new HappyDomInfo(browser.name, browser.version, browser.os)
+        return new WebDriverIOInfo(browser.name, browser.version, browser.os)
     }
   }
 
@@ -290,7 +300,7 @@ export function detect(
   return getServerVersion()
 }
 
-function matchUserAgent(ua: string): UserAgentMatch {
+function matchUserAgent(ua: string) {
   // opted for using reduce here rather than Array#first with a regex.test call
   // this is primarily because using the reduce we only perform the regex
   // execution once rather than once for the test and for the exec again below
@@ -310,14 +320,12 @@ function matchUserAgent(ua: string): UserAgentMatch {
   )
 }
 
-export function browserName(ua: string): Browser | null {
+export function browserName(ua: string) {
   const data = matchUserAgent(ua)
   return data ? data[0] : null
 }
 
-export function parseUserAgent(
-  ua: string,
-): BrowserInfo | SearchBotDeviceInfo | BotInfo | null {
+export function parseUserAgent(ua: string) {
   const matchedRule: UserAgentMatch = matchUserAgent(ua)
 
   if (!matchedRule)
@@ -346,13 +354,13 @@ export function parseUserAgent(
   const os = detectOS(ua)
   const searchBotMatch = SEARCHBOT_OS_REGEX.exec(ua)
 
-  if (searchBotMatch && searchBotMatch[1])
+  if (searchBotMatch?.[1])
     return new SearchBotDeviceInfo(name, version, os, searchBotMatch[1])
 
   return new BrowserInfo(name, version, os)
 }
 
-export function detectOS(ua: string): OperatingSystem | null {
+export function detectOS(ua: string) {
   for (let ii = 0, count = operatingSystemRules.length; ii < count; ii++) {
     const [os, regex] = operatingSystemRules[ii]
     const match = regex.exec(ua)
@@ -363,12 +371,12 @@ export function detectOS(ua: string): OperatingSystem | null {
   return null
 }
 
-export function getServerVersion(): ServerInfo | null {
+export function getServerVersion() {
   return nodeVersion ? new ServerInfo(`${nodeVersion}`) : null
 }
 
-function createVersionParts(count: number): string[] {
-  const output = []
+function createVersionParts(count: number) {
+  const output: string[] = []
   for (let ii = 0; ii < count; ii++)
     output.push('0')
 
