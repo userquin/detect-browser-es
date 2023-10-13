@@ -47,16 +47,16 @@ To run the tests, from root folder run `nr dev` or `nr test` (with coverage), th
 - Happy DOM and jsdom tests, except WebdriverIO detection
 
 To run tests using Vitest Browser with WebdriverIO, run one of the following commands:
-- `nr test-chrome`: Chrome must be installed
-- `nr test-edge`: Edge must be installed
-- `nr test-firefox`: Firefox must be installed
-- `nr test-safari`: Safari must be installed and only on macOS machine
+- `nr test:chrome`: Chrome must be installed
+- `nr test:edge`: Edge must be installed
+- `nr test:firefox`: Firefox must be installed
+- `nr test:safari`: Safari must be installed and only on macOS machine
 
 To test WebdriverIO detection, run one of the following commands:
-- `nr wdio-chrome`: Chrome must be installed
-- `nr wdio-edge`: Edge must be installed
-- `nr wdio-firefox`: Firefox must be installed
-- `nr wdio-safari`: Safari must be installed and only on macOS machine
+- `nr wdio:chrome`: Chrome must be installed
+- `nr wdio:edge`: Edge must be installed
+- `nr wdio:firefox`: Firefox must be installed
+- `nr wdio:safari`: Safari must be installed and only on macOS machine
 
 ## License
 

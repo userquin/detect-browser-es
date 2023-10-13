@@ -34,14 +34,14 @@
     "lint:fix": "nr lint --fix",
     "release": "pnpm test && pnpm build && bumpp && npm publish",
     "test": "pnpm lint && vitest run --coverage",
-    "test-chrome": "BROWSER=chrome vitest --c vitest-browser.config.mts",
-    "test-edge": "BROWSER=edge vitest --c vitest-browser.config.mts",
-    "test-firefox": "BROWSER=firefox vitest --c vitest-browser.config.mts",
-    "test-safari": "BROWSER=safari vitest --c vitest-browser.config.mts",
-    "wdio-chrome": "BROWSER=chrome wdio run ./wdio.conf.ts",
-    "wdio-edge": "BROWSER=edge wdio run ./wdio.conf.ts",
-    "wdio-firefox": "BROWSER=firefox wdio run ./wdio.conf.ts",
-    "wdio-safari": "BROWSER=safari wdio run ./wdio.conf.ts"
+    "test:chrome": "BROWSER=chrome vitest --c vitest-browser.config.mts",
+    "test:edge": "BROWSER=edge vitest --c vitest-browser.config.mts",
+    "test:firefox": "BROWSER=firefox vitest --c vitest-browser.config.mts",
+    "test:safari": "BROWSER=safari vitest --c vitest-browser.config.mts",
+    "wdio:chrome": "BROWSER=chrome wdio run ./wdio.conf.ts",
+    "wdio:edge": "BROWSER=edge wdio run ./wdio.conf.ts",
+    "wdio:firefox": "BROWSER=firefox wdio run ./wdio.conf.ts",
+    "wdio:safari": "BROWSER=safari wdio run ./wdio.conf.ts"
   },
   "dependencies": {
     "std-env": "^3.4.3"
@@ -49,6 +49,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.43.1",
     "@antfu/ni": "^0.21.8",
+    "@types/mocha": "^10.0.2",
     "@types/node": "^18.18.4",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@vitest/browser": "^1.0.0-beta.2",

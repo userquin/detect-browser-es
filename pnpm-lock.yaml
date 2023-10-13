@@ -16,6 +16,9 @@ devDependencies:
   '@antfu/ni':
     specifier: ^0.21.8
     version: 0.21.8
+  '@types/mocha':
+    specifier: ^10.0.2
+    version: 10.0.2
   '@types/node':
     specifier: ^18.18.4
     version: 18.18.4
