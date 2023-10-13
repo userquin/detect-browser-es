@@ -21,6 +21,46 @@ export type DetectedInfoType =
   | 'react-native'
   | RuntimeName
 
+type UserAgentDataInfoHints = true | {
+  mobile?: boolean
+  model?: boolean
+  brands?: boolean
+  uaFullVersion?: boolean
+  fullVersionList?: boolean
+}
+
+export interface UserAgentDataInfo {
+  platform: string
+  architecture: string
+  platformVersion: string
+  bitness: string
+  isWindows11: boolean
+  isWindows10: boolean
+  x86: boolean
+  x86_64: boolean
+  arm32: boolean
+  arm64: boolean
+  /* on demand */
+  mobile?: boolean
+  /* on demand */
+  model?: string
+  /* on demand */
+  brands?: { brand: string; version: string }[]
+  /* on demand */
+  uaFullVersion?: string
+  /* on demand */
+  fullVersionList?: { brand: string; version: string }[]
+}
+
+interface UserAgentData {
+  platform: string
+  getHighEntropyValues?: (args: any) => Promise<{
+    platformVersion: string
+    architecture: string
+    bitness: string
+  }>
+}
+
 interface DetectedInfo<
   T extends DetectedInfoType, N extends string, O, V = null,
 > {
@@ -399,6 +439,86 @@ export function getNodeVersion() {
     return null
 
   return new NodeInfo(nodeVersion)
+}
+
+// export async function lookupServerUserAgentData(headers?: )
+
+/**
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgentData
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData/getHighEntropyValues
+ * @see https://learn.microsoft.com/en-us/microsoft-edge/web-platform/how-to-detect-win11
+ *
+ * @param hints true to include all hints, or an object with specific hints to include
+ */
+export async function lookupBrowserAgentData(
+  hints?: UserAgentDataInfoHints,
+) {
+  if (typeof navigator === 'undefined' || !('userAgentData' in navigator))
+    return Promise.resolve(undefined)
+
+  const userAgentData: UserAgentData | undefined = navigator.userAgentData as unknown as any
+  if (!userAgentData || !(typeof userAgentData.getHighEntropyValues === 'function'))
+    return Promise.resolve(undefined)
+
+  const flags = ['architecture', 'platformVersion', 'bitness']
+  if (typeof hints !== 'undefined') {
+    const {
+      model = false,
+      brands = false,
+      mobile = false,
+      uaFullVersion = false,
+      fullVersionList = false,
+    } = hints === true
+      ? {
+          model: true,
+          brands: true,
+          mobile: true,
+          uaFullVersion: true,
+          fullVersionList: true,
+        }
+      : (hints ?? {})
+
+    if (model)
+      flags.push('model')
+    if (brands)
+      flags.push('brands')
+    if (mobile)
+      flags.push('mobile')
+    if (uaFullVersion)
+      flags.push('uaFullVersion')
+    if (fullVersionList)
+      flags.push('fullVersionList')
+  }
+
+  return userAgentData.getHighEntropyValues(flags).then((ua) => {
+    const {
+      platformVersion,
+      architecture,
+      bitness,
+    } = ua
+    let isWindows11 = false
+    let isWindows10 = false
+    if (userAgentData.platform === 'Windows') {
+      const majorPlatformVersion = Number.parseInt(platformVersion.split('.')[0])
+      isWindows11 = majorPlatformVersion >= 13
+      isWindows10 = majorPlatformVersion > 0
+    }
+    const x86 = architecture === 'x86' && bitness === '32'
+    const x86_64 = architecture === 'x86' && bitness === '64'
+    const arm32 = architecture === 'arm' && bitness === '32'
+    const arm64 = architecture === 'arm' && bitness === '64'
+
+    return Promise.resolve(<UserAgentDataInfo>{
+      ...ua,
+      platform: userAgentData.platform,
+      isWindows11,
+      isWindows10,
+      x86,
+      x86_64,
+      arm32,
+      arm64,
+    })
+  })
 }
 
 export function getServerVersion() {
