@@ -1,7 +1,7 @@
-import process from 'node:process'
+import { env } from 'std-env'
 import { defineConfig } from 'vitest/config'
 
-const name = process.env.BROWSER ?? 'chrome'
+const name = env.BROWSER ?? 'chrome'
 
 export default defineConfig({
   define: {

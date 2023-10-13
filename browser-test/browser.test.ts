@@ -18,7 +18,7 @@ describe('Browser Detection test', () => {
     expect(detect()?.name).toBe('chrome')
   })
   test.skipIf(browser !== 'edge')('Edge', () => {
-    expect(detect()?.name).toBe('edge')
+    expect(detect()?.name).toBe('edge-chromium')
   })
   test.skipIf(browser !== 'firefox')('FireFox', () => {
     expect(detect()?.name).toBe('firefox')

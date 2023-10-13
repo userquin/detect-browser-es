@@ -8,7 +8,10 @@
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "detect-browser-es": ["../src/index.ts"]
+    }
   },
-  "include": ["src", "browser-test", "test"]
+  "include": ["src", "browser-test", "test", "wdio-test"]
 }

@@ -42,9 +42,15 @@ const { detect } = require('detect-browser-es')
 
 ## Testing
 
-To run the tests, from root folder run `nr test`, the script will run:
+To run the tests, from root folder run `nr dev` or `nr test` (with coverage), the script will run:
 - the original tests from `detect-browser`
 - Happy DOM and jsdom tests, except WebdriverIO detection
+
+To run tests in the browser via WebdriverIO, run one of the following commands:
+- `nr test-chrome`: Chrome must be installed
+- `nr test-edge`: Edge must be installed
+- `nr test-firefox`: Firefox must be installed
+- `nr test-safari`: Safari must be installed and only on macOS machine
 
 To test WebdriverIO detection, run one of the following commands:
 - `nr wdio-chrome`: Chrome must be installed
