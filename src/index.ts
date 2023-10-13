@@ -1,22 +1,25 @@
 import {
-  type ProviderInfo,
-  type RuntimeInfo,
   nodeMajorVersion,
   nodeVersion,
   platform,
   providerInfo,
-  runtimeInfo,
+  runtime, runtimeInfo,
+} from 'std-env'
+import type {
+  ProviderInfo,
+  RuntimeInfo,
+  RuntimeName,
 } from 'std-env'
 
 export type DetectedInfoType =
   | 'browser'
-  | 'node'
   | 'jsdom'
   | 'happy-dom'
   | 'webdriverio'
   | 'bot-device'
   | 'bot'
   | 'react-native'
+  | RuntimeName
 
 interface DetectedInfo<
   T extends DetectedInfoType, N extends string, O, V = null,
@@ -45,17 +48,31 @@ implements DetectedInfo<'browser', Browser, OperatingSystem | null, string> {
   ) {}
 }
 
-export class ServerInfo
+/**
+ * @deprecated Use `ServerInfo` instead
+ */
+export class NodeInfo
 implements DetectedInfo<'node', 'node', NodeJS.Platform, string> {
   public readonly type = 'node'
   public readonly name: 'node' = 'node' as const
   public readonly os: NodeJS.Platform = platform
+
+  constructor(public readonly version: string) {}
+}
+
+export class ServerInfo
+implements DetectedInfo<RuntimeName, RuntimeName, ProviderInfo, string> {
   public readonly nodeVersion: string | null = nodeVersion
   public readonly nodeMajorVersion: number | null = nodeMajorVersion
   public readonly provider: ProviderInfo | undefined = providerInfo
   public readonly runtime: RuntimeInfo | undefined = runtimeInfo
 
-  constructor(public readonly version: string) {}
+  constructor(
+    public readonly name: RuntimeName,
+    public readonly type: RuntimeName,
+    public readonly os: ProviderInfo,
+    public readonly version: string,
+  ) {}
 }
 
 export class SearchBotDeviceInfo
@@ -149,7 +166,6 @@ export type Browser =
   | 'searchbot'
   | 'jsdom'
   | 'happy-dom'
-  | 'webdriverio'
 export type OperatingSystem =
   | 'iOS'
   | 'Android OS'
@@ -371,11 +387,30 @@ export function detectOS(ua: string) {
   return null
 }
 
+/**
+ * @deprecated Use `getServerVersion` instead
+ */
+export function getNodeVersion() {
+  if (runtime !== 'node' || !nodeVersion)
+    return null
+
+  return new NodeInfo(nodeVersion)
+}
+
 export function getServerVersion() {
-  return nodeVersion ? new ServerInfo(`${nodeVersion}`) : null
+  // TODO: how to extract version?
+  return runtimeInfo
+    ? new ServerInfo(
+      runtimeInfo.name,
+      runtimeInfo.name,
+      providerInfo,
+      '<todo>',
+    )
+    : null
 }
 
 function createVersionParts(count: number) {
+  // return Array.from({ length: count }, () => '0')
   const output: string[] = []
   for (let ii = 0; ii < count; ii++)
     output.push('0')

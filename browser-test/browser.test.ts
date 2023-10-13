@@ -10,6 +10,10 @@ describe('Browser Detection test', () => {
     expect(typeof navigator).toBeDefined()
     expect(typeof navigator?.userAgent).toBeDefined()
   })
+  // TODO: missing __wdioSpec__ and cookie
+  test.skip('WebdriverIO Detection', () => {
+    expect(detect()?.type).toBe('webdriverio')
+  })
   test.skipIf(browser !== 'chrome')('Chrome', () => {
     expect(detect()?.name).toBe('chrome')
   })
