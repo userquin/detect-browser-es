@@ -60,18 +60,22 @@ implements DetectedInfo<'node', 'node', NodeJS.Platform, string> {
   constructor(public readonly version: string) {}
 }
 
+// TODO: include version if possible
 export class ServerInfo
-implements DetectedInfo<RuntimeName, RuntimeName, ProviderInfo, string> {
+implements DetectedInfo<RuntimeName, RuntimeName, ProviderInfo/* , string */> {
   public readonly nodeVersion: string | null = nodeVersion
   public readonly nodeMajorVersion: number | null = nodeMajorVersion
   public readonly provider: ProviderInfo | undefined = providerInfo
   public readonly runtime: RuntimeInfo | undefined = runtimeInfo
+  // TODO: include version if possible
+  public readonly version: null = null
 
   constructor(
     public readonly name: RuntimeName,
     public readonly type: RuntimeName,
     public readonly os: ProviderInfo,
-    public readonly version: string,
+    // TODO: include version if possible
+    // public readonly version: string,
   ) {}
 }
 
@@ -87,7 +91,7 @@ implements
   ) {}
 }
 
-export class BotInfo implements DetectedInfo<'bot', 'bot', null, null> {
+export class BotInfo implements DetectedInfo<'bot', 'bot', null> {
   public readonly type = 'bot'
   public readonly bot: true = true as const // NOTE: deprecated test name instead
   public readonly name: 'bot' = 'bot' as const
@@ -96,7 +100,7 @@ export class BotInfo implements DetectedInfo<'bot', 'bot', null, null> {
 }
 
 export class ReactNativeInfo
-implements DetectedInfo<'react-native', 'react-native', null, null> {
+implements DetectedInfo<'react-native', 'react-native', null> {
   public readonly type = 'react-native'
   public readonly name: 'react-native' = 'react-native' as const
   public readonly version: null = null
@@ -404,7 +408,7 @@ export function getServerVersion() {
       runtimeInfo.name,
       runtimeInfo.name,
       providerInfo,
-      '<todo>',
+      // TODO: include version if possible
     )
     : null
 }
