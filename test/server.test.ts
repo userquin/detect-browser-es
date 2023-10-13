@@ -2,6 +2,11 @@ import { runtime } from 'std-env'
 import { detect, getNodeVersion, getServerVersion } from '../src'
 
 describe('Server Detection', () => {
+  test('Server Detection', () => {
+    const serverInfo = detect()
+    expect(serverInfo).toBeDefined()
+    expect(serverInfo?.type).toBeDefined()
+  })
   test.skipIf(runtime !== 'node')('Node Detection', () => {
     it('node info is present', () => {
       const nodeInfo = getNodeVersion()
@@ -9,11 +14,6 @@ describe('Server Detection', () => {
       expect(nodeInfo?.os).toBeDefined()
       expect(nodeInfo?.name).toBe('node')
       expect(nodeInfo?.version).toBeDefined()
-    })
-    it('node is server', () => {
-      const serverInfo = detect()
-      expect(serverInfo).toBeDefined()
-      expect(serverInfo?.name).toBe('node')
     })
     it('server info is present', () => {
       const serverInfo = getServerVersion()

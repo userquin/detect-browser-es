@@ -37,7 +37,7 @@ const { detect } = require('detect-browser-es')
 ## New Features
 
 - Detect [Happy DOM](https://github.com/capricorn86/happy-dom) and [jsdom](https://github.com/jsdom/jsdom) when using test environments like [Vitest](https://github.com/vitest-dev/vitest) (check the [test](https://github.com/userquin/detect-browser-es/tree/main/test) folder).
-- Detect [WebdriverIO](https://github.com/webdriverio/webdriverio) when using WebdriverIO tests or test environments like [Vitest](https://github.com/vitest-dev/vitest) with `@vitest/browser`.
+- Detect [WebdriverIO](https://github.com/webdriverio/webdriverio) when using WebdriverIO tests.
 - ServerInfo via [std-env](https://github.com/unjs/std-env) with [provider](https://github.com/unjs/std-env#provider-detection) and [runtime](https://github.com/unjs/std-env#runtime-detection) detection.
 
 ## Testing

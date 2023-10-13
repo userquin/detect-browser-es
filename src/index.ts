@@ -123,7 +123,7 @@ implements DetectedInfo<'happy-dom', Browser, OperatingSystem | null, string> {
   ) {}
 }
 
-export class WebDriverIOInfo
+export class WebdriverIOInfo
 implements DetectedInfo<'webdriverio', Browser, OperatingSystem | null, string> {
   public readonly type = 'webdriverio'
   constructor(
@@ -306,7 +306,7 @@ export function detect(userAgent?: string) {
     if ('__wdioSpec__' in window) {
       const browser = parseUserAgent(navigator.userAgent)
       if (browser instanceof BrowserInfo)
-        return new WebDriverIOInfo(browser.name, browser.version, browser.os)
+        return new WebdriverIOInfo(browser.name, browser.version, browser.os)
     }
   }
 
