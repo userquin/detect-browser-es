@@ -46,7 +46,7 @@ To run the tests, from root folder run `nr dev` or `nr test` (with coverage), th
 - the original tests from `detect-browser`
 - Happy DOM and jsdom tests, except WebdriverIO detection
 
-To run tests in the browser via WebdriverIO, run one of the following commands:
+To run tests using Vitest Browser with WebdriverIO, run one of the following commands:
 - `nr test-chrome`: Chrome must be installed
 - `nr test-edge`: Edge must be installed
 - `nr test-firefox`: Firefox must be installed

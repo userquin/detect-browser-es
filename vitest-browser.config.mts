@@ -8,7 +8,6 @@ export default defineConfig({
     'process.env.VITE_BROWSER': JSON.stringify(name),
   },
   test: {
-    globals: true,
     include: ['browser-test/*.test.ts'],
     browser: {
       enabled: true,

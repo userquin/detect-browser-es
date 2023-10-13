@@ -4,7 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "baseUrl": ".",
-    "types": ["node", "vitest/globals"],
+    "types": ["node"],
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,

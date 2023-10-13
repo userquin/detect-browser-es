@@ -6,7 +6,7 @@ const browserName = browser.capabilities.browserName
 
 describe('WebdriverIO detection', () => {
   it('WebdriverIO Detection', () => {
-    expect(detect()?.type).toBe('webdriverio')
+    expect(detect()?.type).to('webdriverio')
   })
   if (browserName === 'chrome') {
     it('Chrome', () => {
