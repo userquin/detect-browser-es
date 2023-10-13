@@ -30,16 +30,14 @@ import { detect } from 'detect-browser-es'
 const { detect } = require('detect-browser-es')
 ```
 
-## Breaking Changes
+## Deprecations
 
-**TODO**: maybe we can revert these changes before releasing the first version.
-
-[NodeInfo](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts#L30) and [getNodeVersion](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts#L306C17-L306C31) have been renamed to [ServerInfo](https://github.com/userquin/detect-browser-es/blob/main/src/index.ts#L47) and [getServerVersion](https://github.com/userquin/detect-browser-es/blob/main/src/index.ts#L366) respectively.
+[NodeInfo](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts#L30) and [getNodeVersion](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts#L306C17-L306C31) have been deprecated and replaced with [ServerInfo](https://github.com/userquin/detect-browser-es/blob/main/src/index.ts#L47) and [getServerVersion](https://github.com/userquin/detect-browser-es/blob/main/src/index.ts#L366) respectively.
 
 ## New Features
 
 - Detect [Happy DOM](https://github.com/capricorn86/happy-dom) and [jsdom](https://github.com/jsdom/jsdom) when using test environments like [Vitest](https://github.com/vitest-dev/vitest) (check the [test](https://github.com/userquin/detect-browser-es/tree/main/test) folder).
-- Detect [WebdriverIO](https://github.com/webdriverio/webdriverio) when using WebdriverIO tests or test environments like [Vitest](https://github.com/vitest-dev/vitest) with `@vitest/browser`.
+- Detect [WebdriverIO](https://github.com/webdriverio/webdriverio) when using WebdriverIO tests.
 - ServerInfo via [std-env](https://github.com/unjs/std-env) with [provider](https://github.com/unjs/std-env#provider-detection) and [runtime](https://github.com/unjs/std-env#runtime-detection) detection.
 
 ## Testing
@@ -48,7 +46,7 @@ To run the tests, from root folder run `nr test`, the script will run:
 - the original tests from `detect-browser`
 - Happy DOM and jsdom tests, except WebdriverIO detection
 
-To test WebdriverIO detection, run one of the following commands (requires Vitest v1.0.0-beta.2, not yet released, tests will not work):
+To test WebdriverIO detection, run one of the following commands:
 - `nr wdio-chrome`: Chrome must be installed
 - `nr wdio-edge`: Edge must be installed
 - `nr wdio-firefox`: Firefox must be installed
