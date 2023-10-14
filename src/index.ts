@@ -497,7 +497,7 @@ export async function asyncDetect(options?: {
  */
 export async function lookupUserAgentHints(options?: {
   hints?: UserAgentDataHints[]
-  httpHeaders?: Record<string, string | undefined>
+  httpHeaders?: RequestHeaders
 }) {
   const ua = await lookupClientUserAgentHints(options?.hints)
   if (ua)
@@ -621,5 +621,5 @@ function createVersionParts(count: number) {
 }
 
 function removeDoubleQuotes(str: string) {
-  return str.replace(/^"/g, '').replace(/"$/g, '')
+  return str.replace(/^"/, '').replace(/"$/, '')
 }
