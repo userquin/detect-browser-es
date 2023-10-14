@@ -1,6 +1,7 @@
 import { runtime } from 'std-env'
 import { describe, expect, it, test } from 'vitest'
 import {
+  asyncDetect,
   detect,
   getNodeVersion,
   getServerVersion,
@@ -53,7 +54,7 @@ describe('Server Detection', () => {
       'Sec-CH-UA-Bitness': '"64"',
       'Sec-CH-UA-Mobile': '?1',
       'Sec-CH-UA-Model': '"Pixel 2 XL"',
-      'Sec-CH-UA-Full-Version': '"73.1.2343B.TR"',
+      'Sec-CH-UA-Platform-Version': '"73.1.2343B.TR"',
       'Sec-CH-UA-Platform': '"Windows"',
       'Sec-CH-UA-Full-Version-List': '"Microsoft Edge"; v="92.0.902.73", "Chromium"; v="92.0.4515.131", "?Not:Your Browser"; v="3.1.2.0"',
     })).toMatchInlineSnapshot(`
@@ -91,11 +92,25 @@ describe('Server Detection', () => {
         "mobile": true,
         "model": "Pixel 2 XL",
         "platform": "Windows",
-        "platformVersion": "",
+        "platformVersion": "73.1.2343B.TR",
       }
     `)
     expect(lookupServerUserAgentHints({
       'Sec-CH-UA-Mobile': '?0',
     })?.mobile).toBe(false)
+  })
+  test('Windows 11 server detection', async () => {
+    const info = await asyncDetect({
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+      httpHeaders: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+        'Sec-CH-UA-Platform': '"Windows"',
+        'Sec-CH-UA-Platform-Version': '13.0.0',
+      },
+    })
+    expect(info).toBeDefined()
+    expect(info?.type).toBe('browser')
+    expect(info?.name).toBe('chrome')
+    expect(info?.os).toBe('Windows 11')
   })
 })

@@ -84,6 +84,7 @@ implements DetectedInfo<'node', 'node', NodeJS.Platform, string> {
   public readonly type = 'node'
   public readonly name: 'node' = 'node' as const
   public readonly os: NodeJS.Platform = platform
+  public readonly ua?: UserAgentDataInfo = undefined
   constructor(
     public readonly version: string,
   ) {}
@@ -98,6 +99,7 @@ implements DetectedInfo<RuntimeName, RuntimeName, ProviderInfo/* , string */> {
   public readonly runtime: RuntimeInfo | undefined = runtimeInfo
   // TODO: include version if possible
   public readonly version: null = null
+  public readonly ua?: UserAgentDataInfo = undefined
 
   constructor(
     public readonly name: RuntimeName,
@@ -112,6 +114,7 @@ export class SearchBotDeviceInfo
 implements
     DetectedInfo<'bot-device', Browser, OperatingSystem | null, string> {
   public readonly type = 'bot-device'
+  public readonly ua?: UserAgentDataInfo = undefined
   constructor(
     public readonly name: Browser,
     public readonly version: string,
@@ -126,9 +129,7 @@ export class BotInfo implements DetectedInfo<'bot', 'bot', null> {
   public readonly name: 'bot' = 'bot' as const
   public readonly version: null = null
   public readonly os: null = null
-  constructor(
-    public readonly ua?: UserAgentDataInfo,
-  ) {}
+  public readonly ua?: UserAgentDataInfo = undefined
 }
 
 export class ReactNativeInfo
@@ -137,11 +138,13 @@ implements DetectedInfo<'react-native', 'react-native', null> {
   public readonly name: 'react-native' = 'react-native' as const
   public readonly version: null = null
   public readonly os: null = null
+  public readonly ua?: UserAgentDataInfo = undefined
 }
 
 export class JSDOMInfo
 implements DetectedInfo<'jsdom', Browser, OperatingSystem | null, string> {
   public readonly type = 'jsdom'
+  public readonly ua?: UserAgentDataInfo = undefined
   constructor(
     public readonly name: Browser,
     public readonly version: string,
@@ -152,6 +155,7 @@ implements DetectedInfo<'jsdom', Browser, OperatingSystem | null, string> {
 export class HappyDomInfo
 implements DetectedInfo<'happy-dom', Browser, OperatingSystem | null, string> {
   public readonly type = 'happy-dom'
+  public readonly ua?: UserAgentDataInfo = undefined
   constructor(
     public readonly name: Browser,
     public readonly version: string,
