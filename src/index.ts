@@ -442,9 +442,11 @@ export function getNodeVersion() {
 export async function asyncDetect(options?: {
   userAgent?: string
   hints?: UserAgentDataHints[]
-  httpHeaders?: Record<string, string | undefined>
+  httpHeaders?: RequestHeaders
 }) {
-  const info = detect(options?.userAgent)
+  const info = detect(
+    options?.userAgent ?? options?.httpHeaders?.['user-agent'] ?? options?.httpHeaders?.['User-Agent'],
+  )
   if (!info)
     return info
 
@@ -517,6 +519,18 @@ export async function lookupClientUserAgentHints(hints?: UserAgentDataHints[]) {
   return await userAgentData.getHighEntropyValues(hints)
 }
 
+type _HTTPHeaderName = 'Sec-CH-UA' | 'Sec-CH-UA-Mobile' | 'Sec-CH-UA-Platform' | 'Sec-CH-UA-Arch' | 'Sec-CH-UA-Bitness' | 'Sec-CH-UA-Model' | 'Sec-CH-UA-Platform-Version' | 'Sec-CH-UA-Full-Version-List'
+
+export type HTTPHeaderName =
+    | _HTTPHeaderName
+    | Lowercase<_HTTPHeaderName>
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    | (string & {})
+
+export type RequestHeaders = Partial<
+    Record<HTTPHeaderName, string | undefined>
+>
+
 const uaAgentHints: Record<string, keyof UserAgentDataInfo> = {
   'Sec-CH-UA': 'brands',
   'Sec-CH-UA-Mobile': 'mobile',
@@ -528,7 +542,7 @@ const uaAgentHints: Record<string, keyof UserAgentDataInfo> = {
   'Sec-CH-UA-Full-Version-List': 'fullVersionList',
 }
 
-const serverAcceptCHHeaders: Record<UserAgentDataHints, string> = {
+const serverAcceptCHHeaders: Record<UserAgentDataHints, HTTPHeaderName> = {
   architecture: 'Sec-CH-UA-Arch',
   bitness: 'Sec-CH-UA-Bitness',
   model: 'Sec-CH-UA-Model',
@@ -539,9 +553,9 @@ const serverAcceptCHHeaders: Record<UserAgentDataHints, string> = {
 /**
  * @see https://github.com/WICG/ua-client-hints
  */
-export function lookupServerUserAgentHints(httpHeaders: Record<string, string | undefined>) {
+export function lookupServerUserAgentHints(httpHeaders: RequestHeaders) {
   return Object.entries(uaAgentHints).reduce((acc, [header, key]) => {
-    const value = httpHeaders[header]
+    const value = httpHeaders[header] ?? httpHeaders[header.toLowerCase()]
     if (value && value.length) {
       if (key === 'brands' || key === 'fullVersionList') {
         const parts = value.split(',')
@@ -582,7 +596,7 @@ export function serverResponseHeadersForUserAgentHints(
     .filter(([key]) => hints.includes(key as UserAgentDataHints))
     .map(([_, header]) => header)
 
-  return headers.length ? <Record<string, string>>{ 'Accept-CH': headers.join(', ') } : undefined
+  return headers.length ? <RequestHeaders>{ 'Accept-CH': headers.join(', ') } : undefined
 }
 
 export function getServerVersion() {

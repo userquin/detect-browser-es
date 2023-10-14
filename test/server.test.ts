@@ -99,9 +99,21 @@ describe('Server Detection', () => {
       'Sec-CH-UA-Mobile': '?0',
     })?.mobile).toBe(false)
   })
-  test('Windows 11 server detection', async () => {
+  test('Windows 11 server detection: userAgent option', async () => {
     const info = await asyncDetect({
       userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+      httpHeaders: {
+        'Sec-CH-UA-Platform': '"Windows"',
+        'Sec-CH-UA-Platform-Version': '13.0.0',
+      },
+    })
+    expect(info).toBeDefined()
+    expect(info?.type).toBe('browser')
+    expect(info?.name).toBe('chrome')
+    expect(info?.os).toBe('Windows 11')
+  })
+  test('Windows 11 server detection: User-Agent header', async () => {
+    const info = await asyncDetect({
       httpHeaders: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
         'Sec-CH-UA-Platform': '"Windows"',
