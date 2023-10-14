@@ -49,8 +49,8 @@ describe('Server Detection', () => {
   test('UA Client Hints server detection', () => {
     expect(lookupServerUserAgentHints({
       'Sec-CH-UA': '"Chrome"; v="73", "Chromium"; v="73", "?Not:Your Browser"; v="11"',
-      'Sec-CH-UA-Arch': 'arm',
-      'Sec-CH-UA-Bitness': '64',
+      'Sec-CH-UA-Arch': '"arm"',
+      'Sec-CH-UA-Bitness': '"64"',
       'Sec-CH-UA-Mobile': '?1',
       'Sec-CH-UA-Model': '"Pixel 2 XL"',
       'Sec-CH-UA-Full-Version': '"73.1.2343B.TR"',
@@ -89,8 +89,8 @@ describe('Server Detection', () => {
           },
         ],
         "mobile": true,
-        "model": ""Pixel 2 XL"",
-        "platform": ""Windows"",
+        "model": "Pixel 2 XL",
+        "platform": "Windows",
         "platformVersion": "",
       }
     `)

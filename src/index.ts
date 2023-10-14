@@ -551,10 +551,10 @@ export function lookupServerUserAgentHints(httpHeaders: Record<string, string | 
         }
       }
       else if (key === 'mobile') {
-        acc[key] = value === '?1'
+        acc[key] = removeDoubleQuotes(value) === '?1'
       }
       else {
-        acc[key] = value
+        acc[key] = removeDoubleQuotes(value)
       }
     }
     return acc
