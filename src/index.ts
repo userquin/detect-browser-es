@@ -158,7 +158,7 @@ implements DetectedInfo<'happy-dom', Browser, OperatingSystem | null, string> {
   ) {}
 }
 
-export class WDIOBrowserRunnerInfo
+export class WebdriverIOInfo
 implements DetectedInfo<'webdriverio', Browser, OperatingSystem | null, string> {
   public readonly type = 'webdriverio'
   constructor(
@@ -343,7 +343,7 @@ export function detect(userAgent?: string) {
     if ('__wdioSpec__' in window) {
       const browser = parseUserAgent(navigator.userAgent)
       if (browser instanceof BrowserInfo)
-        return new WDIOBrowserRunnerInfo(browser.name, browser.version, browser.os)
+        return new WebdriverIOInfo(browser.name, browser.version, browser.os)
     }
   }
 
@@ -477,8 +477,8 @@ export async function asyncDetect(options?: {
     isWindows11 = !Number.isNaN(majorPlatformVersion) && majorPlatformVersion >= 13
   }
 
-  if (info instanceof WDIOBrowserRunnerInfo)
-    return new WDIOBrowserRunnerInfo(info.name, info.version, isWindows11 ? 'Windows 11' : info.os, ua)
+  if (info instanceof WebdriverIOInfo)
+    return new WebdriverIOInfo(info.name, info.version, isWindows11 ? 'Windows 11' : info.os, ua)
 
   return new BrowserInfo(info.name, info.version, isWindows11 ? 'Windows 11' : info.os, ua)
 }
