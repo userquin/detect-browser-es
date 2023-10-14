@@ -51,13 +51,16 @@ To detect Windows 11 in the browser, you need to use the `asyncDetect` function 
 
 To detect Windows 11 in the server, you need to send `Accept-CH` http response header to the client with the corresponding `Sec-CH-UA-*` values. You can use the `serverResponseHeadersForUserAgentHints` function providing the required entries for your application, it will return the corresponding `Accept-CH` header. The function accepts the hint names you use in the browser, you don't need to worry about http header names.
 
-To access the low-entropy User-Agent Client Hints values (`mobile`, `platform` and `brands` ), you don't need to use the `asyncDetect` function, you can use the `navigator.userAgentData` object when available in the browser (check [browser compatibility](https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API#browser_compatibility)), or using `lookupServerUserAgentHints` for server.
+To access the low-entropy User-Agent Client Hints values (`mobile`, `platform` and `brands` ), you don't need to use the `asyncDetect` function, you can use the `navigator.userAgentData` object when available in the browser (check [browser compatibility](https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API#browser_compatibility)), or using `lookupServerUserAgentHints` function for server.
 
 ## Testing
 
 To run the tests, from root folder run `nr dev` or `nr test` (with coverage), the script will run:
 - the original tests from `detect-browser`
 - Happy DOM and jsdom tests, except WebdriverIO detection
+- server User-Agent Client Hints detection 
+- server Windows 11 detection
+- server Accept-CH response header generation
 
 To run tests using Vitest Browser with WebdriverIO, run one of the following commands:
 - `nr test:chrome`: Chrome must be installed
