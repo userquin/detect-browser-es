@@ -21,44 +21,29 @@ export type DetectedInfoType =
   | 'react-native'
   | RuntimeName
 
-type UserAgentDataInfoHints = true | {
-  mobile?: boolean
-  model?: boolean
-  brands?: boolean
-  uaFullVersion?: boolean
-  fullVersionList?: boolean
+/**
+ * https://wicg.github.io/ua-client-hints/#interface
+ */
+interface BrandVersion {
+  brand: string
+  version: string
 }
 
 export interface UserAgentDataInfo {
+  brands: BrandVersion[]
+  mobile: boolean
   platform: string
   architecture: string
-  platformVersion: string
   bitness: string
-  isWindows11: boolean
-  isWindows10: boolean
-  x86: boolean
-  x86_64: boolean
-  arm32: boolean
-  arm64: boolean
-  /* on demand */
-  mobile?: boolean
-  /* on demand */
-  model?: string
-  /* on demand */
-  brands?: { brand: string; version: string }[]
-  /* on demand */
-  uaFullVersion?: string
-  /* on demand */
-  fullVersionList?: { brand: string; version: string }[]
+  model: string
+  platformVersion: string
+  fullVersionList: BrandVersion[]
 }
 
+type UserAgentDataHints = 'architecture' | 'bitness' | 'model' | 'platformVersion' | 'fullVersionList'
 interface UserAgentData {
   platform: string
-  getHighEntropyValues?: (args: any) => Promise<{
-    platformVersion: string
-    architecture: string
-    bitness: string
-  }>
+  getHighEntropyValues?: (hints?: UserAgentDataHints[]) => Promise<UserAgentDataInfo>
 }
 
 interface DetectedInfo<
@@ -68,6 +53,7 @@ interface DetectedInfo<
   readonly name: N
   readonly version: V
   readonly os: O
+  readonly ua?: UserAgentDataInfo
 }
 
 export interface HappyDOMOptions {
@@ -85,6 +71,7 @@ implements DetectedInfo<'browser', Browser, OperatingSystem | null, string> {
     public readonly name: Browser,
     public readonly version: string,
     public readonly os: OperatingSystem | null,
+    public readonly ua?: UserAgentDataInfo,
   ) {}
 }
 
@@ -96,8 +83,9 @@ implements DetectedInfo<'node', 'node', NodeJS.Platform, string> {
   public readonly type = 'node'
   public readonly name: 'node' = 'node' as const
   public readonly os: NodeJS.Platform = platform
-
-  constructor(public readonly version: string) {}
+  constructor(
+    public readonly version: string,
+  ) {}
 }
 
 // TODO: include version if possible
@@ -137,6 +125,9 @@ export class BotInfo implements DetectedInfo<'bot', 'bot', null> {
   public readonly name: 'bot' = 'bot' as const
   public readonly version: null = null
   public readonly os: null = null
+  constructor(
+    public readonly ua?: UserAgentDataInfo,
+  ) {}
 }
 
 export class ReactNativeInfo
@@ -167,13 +158,14 @@ implements DetectedInfo<'happy-dom', Browser, OperatingSystem | null, string> {
   ) {}
 }
 
-export class WebdriverIOInfo
+export class WDIOBrowserRunnerInfo
 implements DetectedInfo<'webdriverio', Browser, OperatingSystem | null, string> {
   public readonly type = 'webdriverio'
   constructor(
     public readonly name: Browser,
     public readonly version: string,
     public readonly os: OperatingSystem | null,
+    public readonly ua?: UserAgentDataInfo,
   ) {}
 }
 
@@ -229,6 +221,7 @@ export type OperatingSystem =
   | 'Windows 10'
   | 'Windows ME'
   | 'Windows CE'
+  | 'Windows 11'
   | 'Open BSD'
   | 'Sun OS'
   | 'Linux'
@@ -350,7 +343,7 @@ export function detect(userAgent?: string) {
     if ('__wdioSpec__' in window) {
       const browser = parseUserAgent(navigator.userAgent)
       if (browser instanceof BrowserInfo)
-        return new WebdriverIOInfo(browser.name, browser.version, browser.os)
+        return new WDIOBrowserRunnerInfo(browser.name, browser.version, browser.os)
     }
   }
 
@@ -441,84 +434,150 @@ export function getNodeVersion() {
   return new NodeInfo(nodeVersion)
 }
 
-// export async function lookupServerUserAgentData(headers?: )
+export async function asyncDetect(options?: {
+  userAgent?: string
+  hints?: UserAgentDataHints[]
+  httpHeaders?: Record<string, string | undefined>
+}) {
+  const info = detect(options?.userAgent)
+  if (!info)
+    return info
+
+  if (info instanceof ReactNativeInfo)
+    return info
+
+  if (info instanceof BotInfo)
+    return info
+
+  if (info instanceof SearchBotDeviceInfo)
+    return info
+
+  if (info instanceof JSDOMInfo)
+    return info
+
+  if (info instanceof HappyDomInfo)
+    return info
+
+  if (info instanceof ServerInfo)
+    return info
+
+  const ua = await lookupUserAgentHints(options)
+
+  if (!ua)
+    return info
+
+  const {
+    platform,
+    platformVersion,
+  } = ua
+
+  let isWindows11 = false
+  if (platform === 'Windows' && platformVersion.length && platformVersion.includes('.')) {
+    const majorPlatformVersion = Number.parseInt(platformVersion.split('.')[0])
+    isWindows11 = !Number.isNaN(majorPlatformVersion) && majorPlatformVersion >= 13
+  }
+
+  if (info instanceof WDIOBrowserRunnerInfo)
+    return new WDIOBrowserRunnerInfo(info.name, info.version, isWindows11 ? 'Windows 11' : info.os, ua)
+
+  return new BrowserInfo(info.name, info.version, isWindows11 ? 'Windows 11' : info.os, ua)
+}
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgentData
  * @see https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData/getHighEntropyValues
  * @see https://learn.microsoft.com/en-us/microsoft-edge/web-platform/how-to-detect-win11
- *
- * @param hints true to include all hints, or an object with specific hints to include
  */
-export async function lookupBrowserAgentData(
-  hints?: UserAgentDataInfoHints,
-) {
+export async function lookupUserAgentHints(options?: {
+  hints?: UserAgentDataHints[]
+  httpHeaders?: Record<string, string | undefined>
+}) {
+  const ua = await lookupClientUserAgentHints(options?.hints)
+  if (ua)
+    return ua
+
+  return options?.httpHeaders
+    ? lookupServerUserAgentHints(options.httpHeaders)
+    : undefined
+}
+
+export async function lookupClientUserAgentHints(hints?: UserAgentDataHints[]) {
   if (typeof navigator === 'undefined' || !('userAgentData' in navigator))
-    return Promise.resolve(undefined)
+    return
 
   const userAgentData: UserAgentData | undefined = navigator.userAgentData as unknown as any
   if (!userAgentData || !(typeof userAgentData.getHighEntropyValues === 'function'))
-    return Promise.resolve(undefined)
+    return
 
-  const flags = ['architecture', 'platformVersion', 'bitness']
-  if (typeof hints !== 'undefined') {
-    const {
-      model = false,
-      brands = false,
-      mobile = false,
-      uaFullVersion = false,
-      fullVersionList = false,
-    } = hints === true
-      ? {
-          model: true,
-          brands: true,
-          mobile: true,
-          uaFullVersion: true,
-          fullVersionList: true,
+  return await userAgentData.getHighEntropyValues(hints)
+}
+
+const uaAgentHints: Record<string, keyof UserAgentDataInfo> = {
+  'Sec-CH-UA': 'brands',
+  'Sec-CH-UA-Mobile': 'mobile',
+  'Sec-CH-UA-Platform': 'platform',
+  'Sec-CH-UA-Arch': 'architecture',
+  'Sec-CH-UA-Bitness': 'bitness',
+  'Sec-CH-UA-Model': 'model',
+  'Sec-CH-UA-Platform-Version': 'platformVersion',
+  'Sec-CH-UA-Full-Version-List': 'fullVersionList',
+}
+
+const serverAcceptCHHeaders: Record<UserAgentDataHints, string> = {
+  architecture: 'Sec-CH-UA-Arch',
+  bitness: 'Sec-CH-UA-Bitness',
+  model: 'Sec-CH-UA-Model',
+  platformVersion: 'Sec-CH-UA-Platform-Version',
+  fullVersionList: 'Sec-CH-UA-Full-Version-List',
+}
+
+/**
+ * @see https://github.com/WICG/ua-client-hints
+ */
+export function lookupServerUserAgentHints(httpHeaders: Record<string, string | undefined>) {
+  return Object.entries(uaAgentHints).reduce((acc, [header, key]) => {
+    const value = httpHeaders[header]
+    if (value && value.length) {
+      if (key === 'brands' || key === 'fullVersionList') {
+        const parts = value.split(',')
+        for (const entries of parts) {
+          let [brand, version] = entries.split(';')
+          brand = removeDoubleQuotes(brand.trim())
+          version = version.trim()
+          acc[key].push({
+            brand,
+            version: removeDoubleQuotes(version.startsWith('v=') ? version.slice(2) : version),
+          })
         }
-      : (hints ?? {})
-
-    if (model)
-      flags.push('model')
-    if (brands)
-      flags.push('brands')
-    if (mobile)
-      flags.push('mobile')
-    if (uaFullVersion)
-      flags.push('uaFullVersion')
-    if (fullVersionList)
-      flags.push('fullVersionList')
-  }
-
-  return userAgentData.getHighEntropyValues(flags).then((ua) => {
-    const {
-      platformVersion,
-      architecture,
-      bitness,
-    } = ua
-    let isWindows11 = false
-    let isWindows10 = false
-    if (userAgentData.platform === 'Windows') {
-      const majorPlatformVersion = Number.parseInt(platformVersion.split('.')[0])
-      isWindows11 = majorPlatformVersion >= 13
-      isWindows10 = majorPlatformVersion > 0
+      }
+      else if (key === 'mobile') {
+        acc[key] = value === '?1'
+      }
+      else {
+        acc[key] = value
+      }
     }
-    const x86 = architecture === 'x86' && bitness === '32'
-    const x86_64 = architecture === 'x86' && bitness === '64'
-    const arm32 = architecture === 'arm' && bitness === '32'
-    const arm64 = architecture === 'arm' && bitness === '64'
-
-    return Promise.resolve(<UserAgentDataInfo>{
-      ...ua,
-      platform: userAgentData.platform,
-      isWindows11,
-      isWindows10,
-      x86,
-      x86_64,
-      arm32,
-      arm64,
-    })
+    return acc
+  }, <UserAgentDataInfo>{
+    brands: [],
+    mobile: false,
+    platform: '',
+    architecture: '',
+    bitness: '',
+    model: '',
+    platformVersion: '',
+    fullVersionList: [],
   })
+}
+
+export function serverResponseHeadersForUserAgentHints(
+  hints: UserAgentDataHints[],
+) {
+  const headers = Object.entries(serverAcceptCHHeaders)
+    .filter(([key]) => hints.includes(key as UserAgentDataHints))
+    .map(([_, header]) => header)
+
+  return headers.length ? <Record<string, string>>{ 'Accept-CH': headers.join(', ') } : undefined
 }
 
 export function getServerVersion() {
@@ -540,4 +599,8 @@ function createVersionParts(count: number) {
     output.push('0')
 
   return output
+}
+
+function removeDoubleQuotes(str: string) {
+  return str.replace(/^"/g, '').replace(/"$/g, '')
 }

@@ -1,5 +1,5 @@
 import { env } from 'std-env'
-import { BrowserInfo, detect, lookupBrowserAgentData } from '../src'
+import { BrowserInfo, asyncDetect, detect } from '../src'
 
 // TODO: update to vitest 1.beta.2: will not work with 1.beta.1
 
@@ -23,22 +23,23 @@ describe('Browser Detection test', () => {
     expect(detect()?.name).toBe('safari')
   })
   test.skipIf(!(browser === 'chrome' || browser === 'edge'))('Detect UserAgentData', async () => {
-    const detectInfo = detect()
+    const detectInfo = await asyncDetect({
+      hints: ['platformVersion'],
+    })
     expect(detectInfo).toBeDefined()
     expect(detectInfo instanceof BrowserInfo).toBeTruthy()
     const browserInfo = detectInfo as BrowserInfo
-    const data = await lookupBrowserAgentData(true)
+    const ua = (detectInfo as BrowserInfo).ua
     // eslint-disable-next-line no-console
-    console.log(JSON.stringify(data ?? {}, null, 2))
+    console.log(JSON.stringify(ua ?? {}, null, 2))
     const os = browserInfo.os
     expect(os).toBeDefined()
+    expect(ua).toBeDefined()
     if (os!.startsWith('Windows')) {
-      expect(data).toBeDefined()
-      expect(data?.platform).toBe('Windows')
-      expect(data?.isWindows10 || data?.isWindows11).toBe(true)
-    }
-    else {
-      expect(data).toBeUndefined()
+      expect(ua?.platform).toBe('Windows')
+      expect(ua?.mobile).toBe(false)
+      expect(ua?.brands?.length ?? 0).toBeGreaterThan(0)
+      expect(detectInfo?.os?.startsWith('Windows ')).toBe(true)
     }
   })
 })
