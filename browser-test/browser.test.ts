@@ -1,6 +1,6 @@
-import { env, platform } from 'std-env'
-import { BrowserInfo, asyncDetect, describe, expect, test } from 'vitest'
-import { detect } from '../src'
+import { env } from 'std-env'
+import { describe, expect, test } from 'vitest'
+import { BrowserInfo, asyncDetect, detect } from '../src'
 
 // TODO: update to vitest 1.beta.2: will not work with 1.beta.1
 
