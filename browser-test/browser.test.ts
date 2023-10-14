@@ -1,4 +1,5 @@
 import { env } from 'std-env'
+import { describe, expect, test } from 'vitest'
 import { BrowserInfo, asyncDetect, detect } from '../src'
 
 // TODO: update to vitest 1.beta.2: will not work with 1.beta.1
@@ -10,11 +11,15 @@ describe('Browser Detection test', () => {
     expect(typeof navigator).toBeDefined()
     expect(typeof navigator?.userAgent).toBeDefined()
   })
+  // TODO: missing __wdioSpec__ and cookie
+  test.skip('WebdriverIO Detection', () => {
+    expect(detect()?.type).toBe('webdriverio')
+  })
   test.skipIf(browser !== 'chrome')('Chrome', () => {
     expect(detect()?.name).toBe('chrome')
   })
   test.skipIf(browser !== 'edge')('Edge', () => {
-    expect(detect()?.name).toBe('edge')
+    expect(detect()?.name).toBe('edge-chromium')
   })
   test.skipIf(browser !== 'firefox')('FireFox', () => {
     expect(detect()?.name).toBe('firefox')

@@ -1,5 +1,5 @@
 import { runtime } from 'std-env'
-import { expect } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 import {
   detect,
   getNodeVersion,

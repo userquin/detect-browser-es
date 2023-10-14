@@ -4,11 +4,14 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "baseUrl": ".",
-    "types": ["node", "vitest/globals"],
+    "paths": {
+      "detect-browser-es": ["../src/index.ts"]
+    },
+    "types": ["node"],
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src", "browser-test", "test"]
+  "include": ["src", "browser-test", "test", "wdio-test"]
 }
