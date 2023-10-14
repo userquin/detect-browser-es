@@ -47,7 +47,7 @@ The new `asyncDetect` function should be used when you need to detect Windows 11
 
 To detect Windows 11 in the browser, you need to use the `asyncDetect` function providing `platformVersion` in the `options.hints` array. 
 
-To detect Windows 11 in the server, you need to send `Accept-CH` http response header to the client with the corresponding `Sec-CH-UA-*` headers. You can use the `serverResponseHeadersForUserAgentHints` function providing the required entries for your application, it will return the corresponding `Accept-CH` header via browser names.
+To detect Windows 11 in the server, you need to send `Accept-CH` http response header to the client with the corresponding `Sec-CH-UA-*` values. You can use the `serverResponseHeadersForUserAgentHints` function providing the required entries for your application, it will return the corresponding `Accept-CH` header. The function accepts the hint names you use in the browser, you don't need to worry about http header names.
 
 To access the low-entropy User-Agent Client Hints values (`mobile`, `platform` and `brands` ), you don't need to use the `asyncDetect` function, you can use the `navigator.userAgentData` object when available in the browser (check [browser compatibility](https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API#browser_compatibility)), or using `lookupServerUserAgentHints` for server.
 
