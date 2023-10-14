@@ -41,7 +41,7 @@ const { detect } = require('detect-browser-es')
 - [User-Agent Client Hints API](https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API) client and server detection: via new `asyncDetect` function.
 - Windows 11 browser detection when using the new `asyncDetect` function (there is no way to detect Windows 11 using only `user-agent`).
 
-## User-Agent Client Hints API
+### User-Agent Client Hints API
 
 The new `asyncDetect` function should be used when you need to detect Windows 11 or any User-Agent Client Hints, otherwise you can still use the `detect` function.
 
