@@ -1,5 +1,12 @@
 import { runtime } from 'std-env'
-import { detect, getNodeVersion, getServerVersion } from '../src'
+import { expect } from 'vitest'
+import {
+  detect,
+  getNodeVersion,
+  getServerVersion,
+  lookupServerUserAgentHints,
+  serverResponseHeadersForUserAgentHints,
+} from '../src'
 
 describe('Server Detection', () => {
   test('Server Detection', () => {
@@ -24,5 +31,71 @@ describe('Server Detection', () => {
       expect(serverInfo?.nodeVersion).toBeDefined()
       expect(serverInfo?.nodeMajorVersion).toBeDefined()
     })
+  })
+  test('Accept-CH server response header', () => {
+    expect(serverResponseHeadersForUserAgentHints([
+      'architecture',
+      'bitness',
+      'model',
+      'platformVersion',
+      'fullVersionList',
+    ])).toMatchInlineSnapshot(`
+      {
+        "Accept-CH": "Sec-CH-UA-Arch, Sec-CH-UA-Bitness, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List",
+      }
+    `)
+  })
+  // https://github.com/WICG/ua-client-hints
+  test('UA Client Hints server detection', () => {
+    expect(lookupServerUserAgentHints({
+      'Sec-CH-UA': '"Chrome"; v="73", "Chromium"; v="73", "?Not:Your Browser"; v="11"',
+      'Sec-CH-UA-Arch': '"arm"',
+      'Sec-CH-UA-Bitness': '"64"',
+      'Sec-CH-UA-Mobile': '?1',
+      'Sec-CH-UA-Model': '"Pixel 2 XL"',
+      'Sec-CH-UA-Full-Version': '"73.1.2343B.TR"',
+      'Sec-CH-UA-Platform': '"Windows"',
+      'Sec-CH-UA-Full-Version-List': '"Microsoft Edge"; v="92.0.902.73", "Chromium"; v="92.0.4515.131", "?Not:Your Browser"; v="3.1.2.0"',
+    })).toMatchInlineSnapshot(`
+      {
+        "architecture": "arm",
+        "bitness": "64",
+        "brands": [
+          {
+            "brand": "Chrome",
+            "version": "73",
+          },
+          {
+            "brand": "Chromium",
+            "version": "73",
+          },
+          {
+            "brand": "?Not:Your Browser",
+            "version": "11",
+          },
+        ],
+        "fullVersionList": [
+          {
+            "brand": "Microsoft Edge",
+            "version": "92.0.902.73",
+          },
+          {
+            "brand": "Chromium",
+            "version": "92.0.4515.131",
+          },
+          {
+            "brand": "?Not:Your Browser",
+            "version": "3.1.2.0",
+          },
+        ],
+        "mobile": true,
+        "model": "Pixel 2 XL",
+        "platform": "Windows",
+        "platformVersion": "",
+      }
+    `)
+    expect(lookupServerUserAgentHints({
+      'Sec-CH-UA-Mobile': '?0',
+    })?.mobile).toBe(false)
   })
 })
