@@ -479,7 +479,7 @@ export async function asyncDetect(options?: {
   } = ua
 
   let isWindows11 = false
-  if (platform === 'Windows' && platformVersion.length && platformVersion.includes('.')) {
+  if (platform === 'Windows' && platformVersion.length) {
     const majorPlatformVersion = Number.parseInt(platformVersion.split('.')[0])
     isWindows11 = !Number.isNaN(majorPlatformVersion) && majorPlatformVersion >= 13
   }
