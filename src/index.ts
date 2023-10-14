@@ -3,7 +3,8 @@ import {
   nodeVersion,
   platform,
   providerInfo,
-  runtime, runtimeInfo,
+  runtime,
+  runtimeInfo,
 } from 'std-env'
 import type {
   ProviderInfo,
