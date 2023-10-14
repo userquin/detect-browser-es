@@ -205,6 +205,7 @@ export type Browser =
   | 'ios-webview'
   | 'curl'
   | 'searchbot'
+  | 'ios-crawler'
   | 'jsdom'
   | 'happy-dom'
 export type OperatingSystem =
@@ -243,7 +244,7 @@ type OperatingSystemRule = [OperatingSystem, RegExp]
 const SEARCHBOX_UA_REGEX
   = /alexa|bot|crawl(er|ing)|facebookexternalhit|feedburner|google web preview|nagios|postrank|pingdom|slurp|spider|yahoo!|yandex/
 const SEARCHBOT_OS_REGEX
-  = /(nuhk|curl|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask Jeeves\/Teoma|ia_archiver)/
+  = /(nuhk|curl|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask Jeeves\/Teoma|ia_archiver|MobileSafari)/
 const REQUIRED_VERSION_PARTS = 3
 
 const userAgentRules: UserAgentRule[] = [
@@ -285,6 +286,7 @@ const userAgentRules: UserAgentRule[] = [
   ['ios-webview', /AppleWebKit\/([\d.]+).*Gecko\)$/],
   ['curl', /^curl\/([\d.]+)$/],
   ['searchbot', SEARCHBOX_UA_REGEX],
+  ['ios-crawler', /MobileSafari\/([\d.]+).*CFNetwork.* Darwin.*/],
   ['jsdom', /jsdom\/([\d.]+).*/],
   ['happy-dom', /HappyDOM\/([\d.]+).*/],
 ]
@@ -409,8 +411,8 @@ export function parseUserAgent(ua: string) {
   }
 
   const version = versionParts.join('.')
-  const os = detectOS(ua)
   const searchBotMatch = SEARCHBOT_OS_REGEX.exec(ua)
+  const os = searchBotMatch?.[1] === 'MobileSafari' ? 'iOS' : detectOS(ua)
 
   if (searchBotMatch?.[1])
     return new SearchBotDeviceInfo(name, version, os, searchBotMatch[1])

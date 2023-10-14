@@ -436,4 +436,15 @@ describe('browser detection', () => {
       bot: 'curl',
     })
   })
+  test('detects MobileSafari bot crawler', () => {
+    expect(parseUserAgent(
+      'MobileSafari/604.1 CFNetwork/1121.2.2 Darwin/19.3.0',
+    )).toEqual({
+      type: 'bot-device',
+      name: 'ios-crawler',
+      version: '604.1.0',
+      os: 'iOS',
+      bot: 'MobileSafari',
+    })
+  })
 })
