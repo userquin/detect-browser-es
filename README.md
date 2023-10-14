@@ -58,9 +58,9 @@ To access the low-entropy User-Agent Client Hints values (`mobile`, `platform` a
 To run the tests, from root folder run `nr dev` or `nr test` (with coverage), the script will run:
 - the original tests from `detect-browser`
 - Happy DOM and jsdom tests, except WebdriverIO detection
-- server User-Agent Client Hints detection 
-- server Windows 11 detection
-- server Accept-CH response header generation
+- User-Agent Client Hints server detection 
+- Windows 11 server detection
+- Accept-CH response header generation
 
 To run tests using Vitest Browser with WebdriverIO, run one of the following commands:
 - `nr test:chrome`: Chrome must be installed
