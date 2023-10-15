@@ -41,17 +41,21 @@ Calling `detect` function will return `ServerInfo` instead `NodeInfo`. If you st
 - Detect [WebdriverIO](https://github.com/webdriverio/webdriverio) when using [@wdio/browser-runner](https://www.npmjs.com/package/@wdio/browser-runner) runner.
 - ServerInfo via [std-env](https://github.com/unjs/std-env) with [provider](https://github.com/unjs/std-env#provider-detection) and [runtime](https://github.com/unjs/std-env#runtime-detection) detection.
 - [User-Agent Client Hints API](https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API) client and server detection: via new `asyncDetect` function.
-- Windows 11 browser detection when using the new `asyncDetect` function (there is no way to detect Windows 11 using only `user-agent`).
+- Windows 11 detection when using the new `asyncDetect` function (there is no way to detect Windows 11 using only `user-agent`).
 
 ### User-Agent Client Hints API
 
 The new `asyncDetect` function should be used when you need to detect Windows 11 or any User-Agent Client Hints, otherwise you can still use the `detect` function.
 
-To detect Windows 11 in the browser, you need to use the `asyncDetect` function providing `platformVersion` in the `options.hints` array. 
+To access the low-entropy User-Agent Client Hints values (`mobile`, `platform` and `brands` ), you don't need to use the `asyncDetect` function, you can use the `navigator.userAgentData` object when available in the browser (check [browser compatibility](https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API#browser_compatibility)), or using `lookupServerUserAgentHints` function for server.
+
+### Windows 11 detection
+
+There is no way to detect Windows 11 using only `user-agent`, you need to use the `asyncDetect` function or the `serverResponseHeadersForUserAgentHints` function and will work only on Chromium based and Opera browsers (those supporting the User-Agent Client Hints API).
+
+To detect Windows 11 in the browser, you need to use the `asyncDetect` function providing `platformVersion` in the `options.hints` array.
 
 To detect Windows 11 in the server, you need to send `Accept-CH` http response header to the client with the corresponding `Sec-CH-UA-*` values. You can use the `serverResponseHeadersForUserAgentHints` function providing the required entries for your application, it will return the corresponding `Accept-CH` header. The function accepts the hint names you use in the browser, you don't need to worry about http header names.
-
-To access the low-entropy User-Agent Client Hints values (`mobile`, `platform` and `brands` ), you don't need to use the `asyncDetect` function, you can use the `navigator.userAgentData` object when available in the browser (check [browser compatibility](https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API#browser_compatibility)), or using `lookupServerUserAgentHints` function for server.
 
 ## Testing
 
