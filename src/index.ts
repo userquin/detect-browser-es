@@ -412,6 +412,7 @@ export function parseUserAgent(ua: string) {
 
   const version = versionParts.join('.')
   const searchBotMatch = SEARCHBOT_OS_REGEX.exec(ua)
+  // TODO: create search bot OS map, don't use this logic
   const os = searchBotMatch?.[1] === 'MobileSafari' ? 'iOS' : detectOS(ua)
 
   if (searchBotMatch?.[1])
