@@ -2,7 +2,7 @@
   "name": "detect-browser-es",
   "type": "module",
   "version": "0.0.0",
-  "packageManager": "pnpm@8.9.0",
+  "packageManager": "pnpm@8.9.2",
   "license": "MIT",
   "homepage": "https://github.com/userquin/detect-browser-es#readme",
   "xrepository": {
