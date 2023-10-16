@@ -2,7 +2,7 @@
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![bundle size](https://flat.badgen.net/bundlephobia/minzip/detect-browser-es)](https://bundlephobia.com/package/detect-browser-es)
+[![License][license-src]][license-href]
 
 ESM build of [detect-browser](https://www.npmjs.com/package/detect-browser) with server info via [std-env](https://github.com/unjs/std-env).
 
@@ -92,6 +92,6 @@ To test WebdriverIO detection, run one of the following commands (will not work,
 [npm-version-href]: https://npmjs.com/package/detect-browser-es
 [npm-downloads-src]: https://img.shields.io/npm/dm/detect-browser-es?style=flat&colorA=18181B&colorB=F0DB4F
 [npm-downloads-href]: https://npmjs.com/package/detect-browser-es
-[license-src]: https://img.shields.io/github/license/unjs/unplugin.svg?style=flat&colorA=18181B&colorB=F0DB4F
-[license-href]: https://github.com/unjs/unplugin/blob/main/LICENSE
+[license-src]: https://img.shields.io/github/license/userquin/detect-browser-es.svg?style=flat&colorA=18181B&colorB=F0DB4F
+[license-href]: https://github.com/userquin/detect-browser-es/blob/main/LICENSE
 
