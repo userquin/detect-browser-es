@@ -5,14 +5,11 @@
   "packageManager": "pnpm@8.9.2",
   "license": "MIT",
   "homepage": "https://github.com/userquin/detect-browser-es#readme",
-  "xrepository": {
-    "type": "git",
-    "url": "https://github.com/unjs/detect-browser-es"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/userquin/detect-browser-es"
   },
+  "bugs": "https://github.com/userquin/detect-browser-es/issues",
   "sideEffects": false,
   "exports": {
     ".": {
