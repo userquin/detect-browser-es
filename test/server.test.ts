@@ -15,7 +15,7 @@ describe('Server Detection', () => {
     expect(serverInfo).toBeDefined()
     expect(serverInfo?.type).toBeDefined()
   })
-  test.skipIf(runtime !== 'node')('Node Detection', () => {
+  describe.skipIf(runtime !== 'node')('Node Detection', () => {
     it('node info is present', () => {
       const nodeInfo = getNodeVersion()
       expect(nodeInfo).toBeDefined()
