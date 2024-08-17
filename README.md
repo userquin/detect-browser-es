@@ -1,4 +1,4 @@
-# detect-browser-es
+# detect-browser-esX
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
