@@ -7,7 +7,7 @@
   "homepage": "https://github.com/userquin/detect-browser-es#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/userquin/detect-browser-es"
+    "url": "git+https://github.com/userquin/detect-browser-es"
   },
   "bugs": "https://github.com/userquin/detect-browser-es/issues",
   "sideEffects": false,
