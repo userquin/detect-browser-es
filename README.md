@@ -65,7 +65,7 @@ To detect Windows 11 in the server, you need to send `Accept-CH` http response h
 
 To run the tests, from root folder run `nr dev` or `nr test` (with coverage), the script will run:
 - the original tests from `detect-browser`
-- Happy DOM and jsdom tests, except WebdriverIO detection
+- Happy DOM and jsdom tests, except WebdriverIO detection: Happy DOM `v15.7.3` seems to omit the version (https://github.com/capricorn86/happy-dom/issues/1528)
 - User-Agent Client Hints server detection 
 - Windows 11 server detection
 - Accept-CH response header generation
