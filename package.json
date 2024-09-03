@@ -34,7 +34,7 @@
     "dev": "vitest",
     "lint": "eslint .",
     "lint:fix": "nr lint --fix",
-    "release": "pnpm build && bumpp && npm publish",
+    "release": "pnpm test && pnpm build && bumpp && npm publish",
     "test": "pnpm lint && vitest run --coverage",
     "test:chrome": "BROWSER=chrome vitest --c vitest-browser.config.ts",
     "test:edge": "BROWSER=edge vitest --c vitest-browser.config.ts",
