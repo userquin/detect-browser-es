@@ -10,6 +10,6 @@ describe('happy-dom', () => {
     const browser = detect()
     expect(browser).toBeDefined()
     expect(browser?.type).toBe('happy-dom')
-    expect(browser?.version).toMatchInlineSnapshot(`"0.0.0"`)
+    expect(browser?.version).toMatchInlineSnapshot('"0.0.0"')
   })
 })
