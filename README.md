@@ -41,7 +41,7 @@ Calling `detect` function returns `ServerInfo` instead `NodeInfo`. If you still 
 
 ## New Features
 
-- Detect [Happy DOM](https://github.com/capricorn86/happy-dom) and [jsdom](https://github.com/jsdom/jsdom) when using test environments like [Vitest](https://github.com/vitest-dev/vitest) (check the [test](https://github.com/userquin/detect-browser-es/tree/main/test) folder).
+- Detect [Happy DOM](https://github.com/capricorn86/happy-dom) and [jsdom](https://github.com/jsdom/jsdom) when using test environments like [Vitest](https://github.com/vitest-dev/vitest) (check the [test](https://github.com/userquin/detect-browser-es/tree/main/test) folder): Happy DOM `v15.7.3` seems to omit the version (https://github.com/capricorn86/happy-dom/issues/1528)
 - Detect [WebdriverIO](https://github.com/webdriverio/webdriverio) when using [@wdio/browser-runner](https://www.npmjs.com/package/@wdio/browser-runner) runner.
 - ServerInfo via [std-env](https://github.com/unjs/std-env) with [provider](https://github.com/unjs/std-env#provider-detection) and [runtime](https://github.com/unjs/std-env#runtime-detection) detection.
 - [User-Agent Client Hints API](https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API) client and server detection: via new `asyncDetect` function.
@@ -65,7 +65,7 @@ To detect Windows 11 in the server, you need to send `Accept-CH` http response h
 
 To run the tests, from root folder run `nr dev` or `nr test` (with coverage), the script will run:
 - the original tests from `detect-browser`
-- Happy DOM and jsdom tests, except WebdriverIO detection: Happy DOM `v15.7.3` seems to omit the version (https://github.com/capricorn86/happy-dom/issues/1528)
+- Happy DOM and jsdom tests, except WebdriverIO detection
 - User-Agent Client Hints server detection 
 - Windows 11 server detection
 - Accept-CH response header generation
